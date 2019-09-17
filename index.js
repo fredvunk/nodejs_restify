@@ -2,12 +2,6 @@ const restify = require("restify");
 const mongoose = require("mongoose");
 const config = require("./config");
 const rjwt = require("restify-jwt-community");
-const m2s = require('mongoose-to-swagger');
-const food = mongoose.model('food', {
-  name: string
-});
-const swaggerSchema = m2s(food);
-console.log(swaggerSchema);
 
 const server = restify.createServer();
 

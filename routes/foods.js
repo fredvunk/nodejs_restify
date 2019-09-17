@@ -28,10 +28,7 @@ module.exports = server => {
         );
       }
 
-      const {
-        name,
-        price
-      } = req.body;
+      const { name, price } = req.body;
 
       const food = new Food({
         name,
@@ -48,6 +45,22 @@ module.exports = server => {
     }
   );
 
+  // Get food by ID
+
+  server.get("/foods/:id", async (req, res, next) => {
+    try {
+      const food = await Food.findById(req.params.id);
+      res.send(food);
+      next();
+    } catch (err) {
+      return next(
+        new errors.ResourceNotFoundError(
+          `There is no food with the id of ${req.params.id}`
+        )
+      );
+    }
+  });
+
   // Update Food
   server.put(
     "/foods/:id",
@@ -61,7 +74,8 @@ module.exports = server => {
       }
 
       try {
-        const food = await Food.findOneAndUpdate({
+        const food = await Food.findOneAndUpdate(
+          {
             _id: req.params.id
           },
           req.body
