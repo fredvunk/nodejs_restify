@@ -37,10 +37,10 @@ module.exports = server => {
 
       try {
         const newFood = await food.save();
-        res.send(201);
+        res.send(201, { message: "Successfully added food" });
         next();
       } catch (err) {
-        return next(new errors.InternalError(err.message));
+        return next(new errors.BadRequestError(err.message));
       }
     }
   );
@@ -80,7 +80,7 @@ module.exports = server => {
           },
           req.body
         );
-        res.send(200);
+        res.send(200, { message: "Updating successful" });
         next();
       } catch (err) {
         return next(
