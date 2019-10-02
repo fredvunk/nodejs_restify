@@ -7,8 +7,11 @@ const config = require("../config");
 
 module.exports = server => {
   // Register User
-  server.post("/register", (req, res, next) => {
-    const { email, password } = req.body;
+  server.post("/user", (req, res, next) => {
+    const {
+      email,
+      password
+    } = req.body;
 
     const user = new User({
       email,
@@ -33,7 +36,10 @@ module.exports = server => {
 
   // Auth User
   server.post("/auth", async (req, res, next) => {
-    const { email, password } = req.body;
+    const {
+      email,
+      password
+    } = req.body;
 
     try {
       // Authenticate User
@@ -44,9 +50,16 @@ module.exports = server => {
         expiresIn: "15m"
       });
 
-      const { iat, exp } = jwt.decode(token);
+      const {
+        iat,
+        exp
+      } = jwt.decode(token);
       // Respond with token
-      res.send({ iat, exp, token });
+      res.send({
+        iat,
+        exp,
+        token
+      });
 
       next();
     } catch (err) {
