@@ -2,7 +2,7 @@ const errors = require("restify-errors");
 const rjwt = require("restify-jwt-community");
 // const bcrypt = require("bcryptjs");
 // const jwt = require("jsonwebtoken");
-// const auth = require("../auth");
+const auth = require("../auth");
 const Food = require("../models/Food");
 const config = require("../config");
 
@@ -23,10 +23,10 @@ module.exports = server => {
   // Post food
   server.post(
     "/foods",
-    //  auth,
-    //rjwt({
-    // secret: config.JWT_SECRET
-    // }),
+    // auth,
+    rjwt({
+      secret: config.JWT_SECRET
+    }),
     async (req, res, next) => {
       // Check for JSON
       if (!req.is("application/json")) {
@@ -47,9 +47,7 @@ module.exports = server => {
 
       try {
         const newFood = await food.save();
-        res.send(200, {
-          message: "Successfully added food"
-        });
+        res.send(200, "Successfully added food");
         next();
       } catch (err) {
         return next(new errors.BadRequestError(err.message));
@@ -76,9 +74,9 @@ module.exports = server => {
   // Update Food
   server.put(
     "/foods/:id",
-    //  rjwt({
-    //   secret: config.JWT_SECRET
-    //}),
+    rjwt({
+      secret: config.JWT_SECRET
+    }),
     async (req, res, next) => {
       // Check for JSON
       if (!req.is("application/json")) {
@@ -93,9 +91,7 @@ module.exports = server => {
           },
           req.body
         );
-        res.send(200, {
-          message: "Updating successful"
-        });
+        res.send(200, "Updating food successful");
         next();
       } catch (err) {
         return next(
@@ -110,9 +106,9 @@ module.exports = server => {
   // Delete Food
   server.del(
     "/foods/:id",
-    //    rjwt({
-    //    secret: config.JWT_SECRET
-    //}),
+    rjwt({
+      secret: config.JWT_SECRET
+    }),
     async (req, res, next) => {
       try {
         const food = await Food.findOneAndRemove({

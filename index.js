@@ -2,15 +2,24 @@ const restify = require("restify");
 const mongoose = require("mongoose");
 const config = require("./config");
 const rjwt = require("restify-jwt-community");
-//const cors = require("cors");
+const corsMiddleware = require("restify-cors-middleware");
+// const cors = require("cors");
 
 const server = restify.createServer();
 
+const cors = corsMiddleware({
+  origins: ["*"],
+  allowHeaders: ["Authorization"],
+  exposeHeaders: ["Authorization"]
+})
 
 // Middleware
+
 server.use(restify.plugins.bodyParser());
 
-//server.use(cors());
+server.pre(cors.preflight);
+server.use(cors.actual);
+// server.use(cors());
 
 // Protect Routes
 // server.use(rjwt({
@@ -27,8 +36,6 @@ server.listen(config.PORT, () => {
     useNewUrlParser: true
   });
 });
-
-
 
 const db = mongoose.connection;
 

@@ -33,7 +33,9 @@ module.exports = server => {
   // Add Customer
   server.post(
     "/customers",
-    rjwt({ secret: config.JWT_SECRET }),
+    rjwt({
+      secret: config.JWT_SECRET
+    }),
     async (req, res, next) => {
       // Check for JSON
       if (!req.is("application/json")) {
@@ -42,7 +44,11 @@ module.exports = server => {
         );
       }
 
-      const { name, email, balance } = req.body;
+      const {
+        name,
+        email,
+        balance
+      } = req.body;
 
       const customer = new Customer({
         name,
@@ -52,7 +58,7 @@ module.exports = server => {
 
       try {
         const newCustomer = await customer.save();
-        res.send(201);
+        res.send(200);
         next();
       } catch (err) {
         return next(new errors.InternalError(err.message));
@@ -63,7 +69,9 @@ module.exports = server => {
   // Update Customer
   server.put(
     "/customers/:id",
-    rjwt({ secret: config.JWT_SECRET }),
+    rjwt({
+      secret: config.JWT_SECRET
+    }),
     async (req, res, next) => {
       // Check for JSON
       if (!req.is("application/json")) {
@@ -73,8 +81,9 @@ module.exports = server => {
       }
 
       try {
-        const customer = await Customer.findOneAndUpdate(
-          { _id: req.params.id },
+        const customer = await Customer.findOneAndUpdate({
+            _id: req.params.id
+          },
           req.body
         );
         res.send(200);
@@ -92,7 +101,9 @@ module.exports = server => {
   // Delete Customer
   server.del(
     "/customers/:id",
-    rjwt({ secret: config.JWT_SECRET }),
+    rjwt({
+      secret: config.JWT_SECRET
+    }),
     async (req, res, next) => {
       try {
         const customer = await Customer.findOneAndRemove({

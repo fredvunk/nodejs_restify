@@ -25,7 +25,7 @@ module.exports = server => {
         // Save User
         try {
           const newUser = await user.save();
-          res.send(201);
+          res.send(200);
           next();
         } catch (err) {
           return next(new errors.InternalError(err.message));
